@@ -14,6 +14,7 @@ public class FileVO {
 	String filename;
 	String url;
 	String content;
+	String year;
 	MultipartFile[] multiFiles;
 	@Override
 	public String toString() {
