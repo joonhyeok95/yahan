@@ -1,4 +1,4 @@
-package com.yehan.util;
+package com.yehan.web.util;
 
 import java.util.HashMap;
 import java.util.Map;

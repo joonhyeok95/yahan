@@ -5,16 +5,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.http.HttpHeaders;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.yehan.util.MediaUtils;
+import com.yehan.web.util.MediaUtils;
+import com.yehan.web.util.Thumbnail;
 import com.yehan.web.vo.FileVO;
 
 @RestController
@@ -36,6 +34,8 @@ public class FileUploadController {
 	@Value("${file.download.directory}") 
 	private String fileDownloadDirectory;
 
+	private final Thumbnail thumbnail = new Thumbnail();
+	
 	// 인덱스 페이지
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public ModelAndView hello(Model model, String year){
@@ -57,10 +57,9 @@ public class FileUploadController {
 	                fileVO.setFilename(file.getName());
 //	                fileVO.setName(file.getName().substring(0,3));
 	                fileVO.setName("");
-	                fileVO.setUrl("/downloadFile/"+ year + "/" + file.getName());
+	                fileVO.setUrl("/download-file/"+ year + "/" + file.getName());
 	                fileVO.setContent("");
 	                dataList.add(fileVO);
-	                System.out.println("파일정보 : "+file.getName());
 //	            }
 	        }
 	        model.addAttribute("dataList", dataList);
@@ -73,9 +72,10 @@ public class FileUploadController {
         return modelAndView;
     }
     
+    
     // 로컬 사진 불러오기
     // G:/workspace/연도/파일이름
-    @RequestMapping(value = "/downloadFile/{year}/{filename}", method = RequestMethod.GET)
+    @RequestMapping(value = "/download-file/{year}/{filename}", method = RequestMethod.GET)
     public ResponseEntity<byte[]> downloadFile(@PathVariable String filename, @PathVariable String year) throws Exception {
     	// Load file as Resource 
         String path = fileDownloadDirectory + year +"/"+ filename;
@@ -115,7 +115,7 @@ public class FileUploadController {
     }
     // 사진업로드
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public RedirectView upload(FileVO filevo) {
+	public RedirectView upload(FileVO filevo) throws Exception {
 		System.out.println(filevo.toString());
 		System.out.println("### upload");
 		System.out.println(filevo.getFilename());
@@ -135,6 +135,9 @@ public class FileUploadController {
 				File targetFile = new File(file);
 				InputStream fileStream = a.getInputStream();
 				FileUtils.copyInputStreamToFile(fileStream, targetFile);
+				
+                // 썸네일 생성
+                thumbnail.makeThumbnail(fileDownloadDirectory + filevo.getYear()+ "/", filevo.getFilename() + "." + ext , ext);
 				
 				i++;
 			}
