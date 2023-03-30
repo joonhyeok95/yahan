@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yehan.web.board.mapper.BoardMapper">
+	<select id="getBoard" resultType="BoardDTO" parameterType="String">
+		SELECT	/* Board.getBoard */
+			  NO
+			, USER_ID
+			, DATE
+			, TITLE
+			, CONTENT
+			, FILE_ID
+			, FILE_NAME
+			, FILE_DATE
+			FROM T_BOARD
+			WHERE 1=1
+			<if test='fileDate!=null'>
+				AND FILE_DATE = #{fileDate}
+			</if>
+	</select>
+	
+	<insert id="insertBoard" parameterType="BoardDTO">
+	<![CDATA[
+		INSERT INTO T_BOARD
+			(
+				  NO
+				, USER_ID
+				, DATE
+				, TITLE
+				, CONTENT
+				, FILE_ID
+				, FILE_NAME
+				, FILE_DATE
+			)
+			VALUES
+			(
+				  #{no}
+				, #{userId}
+				, sysdate()
+				, #{title}
+				, #{content}
+				, #{fileId}
+				, #{fileName}
+				, #{fileDate}				 
+			)
+	]]> 
+	</insert>
+	
+</mapper>
