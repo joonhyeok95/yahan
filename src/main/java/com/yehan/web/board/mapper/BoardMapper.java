@@ -3,10 +3,11 @@ package com.yehan.web.board.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import com.yehan.web.board.model.BoardDTO;
 
-//@Repository
+@Repository
 @Mapper
 public interface BoardMapper {
 	List<BoardDTO> getBoard(String fileDate);

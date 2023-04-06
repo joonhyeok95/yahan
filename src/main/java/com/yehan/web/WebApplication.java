@@ -1,10 +1,13 @@
 package com.yehan.web;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-//@MapperScan(basePackages = "com.yehan.web.mapper")
+@EnableAutoConfiguration
+@ComponentScan(basePackages = {"com.yehan.web.board.mapper"})
 public class WebApplication {
 
 	public static void main(String[] args) {

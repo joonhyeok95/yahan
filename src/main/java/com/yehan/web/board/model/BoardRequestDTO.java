@@ -4,11 +4,13 @@ import java.util.Arrays;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class BoardRequestDTO {
 	private String no;
 	private String userId;
