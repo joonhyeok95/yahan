@@ -44,6 +44,7 @@ public class FileDownloadController {
         		header.add("Content-Disposition", "attachment; filename=\"" + new String(filename.getBytes("UTF-8"), "ISO-8859-1"));
         	}
         	entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), header, HttpStatus.CREATED);
+        	in.close();
         } catch (Exception e) {
 			// TODO: handle exception
         	entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);

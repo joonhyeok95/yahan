@@ -17,85 +17,6 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-<style>
-body {
-  padding: 20px;
-  font-family: sans-serif;
-  background: #f2f2f2;
-}
-a:hover {
-	text-decoration: none;
-	color: #fff;
-}
-img {
-  width: 100%; /* need to overwrite inline dimensions */
-  height: auto;
-}
-h2 {
-  margin-bottom: .5em;
-}
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 1em;
-}
-
-
-/* hover styles */
-.location-listing {
-  position: relative;
-}
-
-.location-image {
-  line-height: 0;
-  overflow: hidden;
-}
-
-.location-image img {
-  filter: blur(0px);
-  transition: filter 0.3s ease-in;
-  transform: scale(1.1);
-}
-
-.location-title {
-  font-size: 1.5em;
-  font-weight: bold;
-  text-decoration: none;
-  z-index: 1;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  transition: opacity .5s;
-  background: rgba(90,0,10,0.4);
-  color: white;
-  
-  /* position the text in t’ middle*/
-  display: flex;
-  align-items: center;
-  justify-content: center;  
-}
-
-.location-listing:hover .location-title {
-  opacity: 1;
-}
-
-.location-listing:hover .location-image img {
-  filter: blur(2px);
-}
-
-/* for touch screen devices */
-@media (hover: none) { 
-  .location-title {
-    opacity: 1;
-  }
-  .location-image img {
-    filter: blur(2px);
-  }
-}
-</style>
 </head>
 <body>
     <div class="container">
@@ -111,7 +32,7 @@ h2 {
 					<select name="year" class="form-control" >
 						<option value="2021" th:selected="${year}=='2021'">2021</option>
 						<option value="2022" th:selected="${year}=='2022'">2022</option>
-						<option value="2023" selected th:selected="${year}=='2023'">2023</option>
+						<option value="2023" th:selected="${year}=='2023'">2023</option>
 					</select>
 				    <div class="input-group-prepend mb-3">
 					<button type="submit" class="btn btn-primary">검색</button>
@@ -124,20 +45,22 @@ h2 {
 		</div>
 	</div>
 
-	<div class="child-page-listing">
-	  <h2>Images</h2>
-	  <div class="grid-container">
-	    <article class="location-listing" th:each="data : ${dataList}">
-	      <a class="location-title" target="_blank" th:href="${data.url}"><span th:text="${data.title}"></span></a>
-	      <div class="location-image">
-	        <a href="#">
-	            <img width="300" height="169" th:src="${data.urlThumb}" th:alt="${data.content}">
-			</a>
-	      </div>
-	    </article>
-	  </div>
-	  <!-- end grid container -->
-	</div>
+      <div class="row">
+        <div class="col-4" th:each="data : ${dataList}">
+		<div class="card mb-4">
+			<img class="card-img-top" style="width:100%; height:200px; object-fit: cover" th:src="${data.url}" />
+			<div class="card-img-overlay">
+				<h4 class="card-title" th:text="${data.title}">Card Name</h4>
+				<p class="card-text" th:text="${data.content}">
+					Some example text some example text
+				</p>
+				<!-- 
+				<a href="#" class="btn btn-primary">see</a>
+				 -->
+			</div>
+		</div>
+		</div>
+  	  </div>
  </div>
  <script>
  </script>

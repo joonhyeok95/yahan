@@ -46,6 +46,7 @@ public class Thumbnail {
 		File thumbFile = new File(thumbName);
 
 		ImageIO.write(destImg, fileExt.toUpperCase(), thumbFile);
+		
 	}
 
 }

@@ -24,9 +24,11 @@ import com.yehan.web.util.UUIDgenerate;
 import com.yehan.web.vo.FileVO;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class BoardController {
 
 	private final BoardService boardService;
@@ -43,7 +45,7 @@ public class BoardController {
     }
 
     // 인덱스 화면
-    @RequestMapping(value = "/",method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView mainPage(Model model, String year){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
@@ -51,11 +53,14 @@ public class BoardController {
 		List<BoardDTO> boardList = boardService.getBoard(year);
 		// download url 세팅
 		for(int i=0; i<boardList.size(); i++) {
-			System.out.println(""+boardList.get(i).getNo());
+			log.debug(""+boardList.get(i).getNo());
 			String fileName = boardList.get(i).getFileName();
 			String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
-			boardList.get(i).setUrl("/download-file/"+ boardList.get(i).getFileDate() + "/THUMB_" + boardList.get(i).getFileId() + "." + ext);
-			System.out.println(boardList.get(i).getUrl());
+			if(!"".equals(boardList.get(0).getFileId())) {
+				boardList.get(i).setUrl("/download-file/"+ boardList.get(i).getFileDate() + "/" + boardList.get(i).getFileId() + "." + ext);
+				boardList.get(i).setUrlThumb("/download-file/"+ boardList.get(i).getFileDate() + "/THUMB_" + boardList.get(i).getFileId() + "." + ext);
+			}
+			log.debug(boardList.get(i).getUrl());
 		}
         model.addAttribute("dataList", boardList);
         model.addAttribute("year", year);
@@ -73,8 +78,8 @@ public class BoardController {
     // 사진업로드
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public RedirectView upload(BoardRequestDTO boardRequestDTO) throws Exception {
-		System.out.println(boardRequestDTO.toString());
-		System.out.println("### upload");
+		log.info(boardRequestDTO.toString());
+		log.info("### upload");
 		
 		BoardDTO boardDTO = new BoardDTO();
 		boardDTO.setUserId("empty");
@@ -91,9 +96,9 @@ public class BoardController {
 				boardDTO.setFileName(a.getOriginalFilename());
 				// 확장자 구하기
 				String file = a.getOriginalFilename();
-					System.out.println("원본이미지명 : " + file);
+					log.info("원본이미지명 : " + file);
 				String ext = file.substring(a.getOriginalFilename().lastIndexOf(".") + 1);
-					System.out.println("확장자명 : " + ext);
+					log.info("확장자명 : " + ext);
 
 				file = fileDownloadDirectory + boardDTO.getFileDate()+ "/" + boardDTO.getFileId() + "." + ext;
 				
@@ -102,6 +107,7 @@ public class BoardController {
 				InputStream fileStream = a.getInputStream();
 				FileUtils.copyInputStreamToFile(fileStream, targetFile);
 				
+				fileStream.close();
                 // 썸네일 생성
                 thumbnail.makeThumbnail(fileDownloadDirectory + boardDTO.getFileDate()+ "/", boardDTO.getFileId() + "." + ext , ext);
 				

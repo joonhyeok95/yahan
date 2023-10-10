@@ -18,4 +18,5 @@ public class BoardDTO {
 	private String fileDate;
 	
 	private String url;
+	private String urlThumb;
 }
