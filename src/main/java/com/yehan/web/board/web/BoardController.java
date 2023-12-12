@@ -1,4 +1,4 @@
-package com.yehan.web.board.controller;
+package com.yehan.web.board.web;
 
 import java.io.File;
 import java.io.IOException;
