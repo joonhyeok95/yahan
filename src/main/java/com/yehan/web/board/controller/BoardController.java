@@ -3,7 +3,6 @@ package com.yehan.web.board.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -16,12 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.yehan.web.board.model.BoardRequestDTO;
 import com.yehan.web.board.model.BoardDTO;
+import com.yehan.web.board.model.BoardRequestDTO;
 import com.yehan.web.board.service.BoardService;
 import com.yehan.web.util.Thumbnail;
 import com.yehan.web.util.UUIDgenerate;
-import com.yehan.web.vo.FileVO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +37,7 @@ public class BoardController {
 	
     @RequestMapping(value = "/boards",method = RequestMethod.GET)
     public String api(Model model, String year){
-		List<BoardDTO> salaryList = boardService.getBoard(year);
+		List<?> salaryList = boardService.getBoard(year);
     	
     	return salaryList.toString();
     }
@@ -50,7 +48,7 @@ public class BoardController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         // 파일리스트
-		List<BoardDTO> boardList = boardService.getBoard(year);
+		List<BoardDTO> boardList = (List<BoardDTO>) boardService.getBoard(year);
 		// download url 세팅
 		for(int i=0; i<boardList.size(); i++) {
 			log.debug(""+boardList.get(i).getNo());
@@ -70,6 +68,7 @@ public class BoardController {
     // 사진업로드 화면
     @RequestMapping(value = "/write",method = RequestMethod.GET)
     public ModelAndView upload(Model model){
+    	log.info("write!");
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("write");
         return modelAndView;

@@ -1,21 +1,35 @@
 #spring.http.multipart.enabled=false
-spring.servlet.multipart.max-file-size=1000MB
-spring.servlet.multipart.max-request-size=2000MB
+spring:
+  servlet:
+    multipart.max-file-size: 1000MB
+    multipart.max-request-size: 2000MB
+  datasource:
+    hikari:
+#	    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:9999}/${DB_NAME:mydb}?characterEncoding=utf8
+      jdbc-url: jdbc:mysql://localhost:3306/yehan?characterEncoding=utf8
+      username: ${DB_USERNAME:test}
+      password: ${DB_PASSWORD:1234}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      pool-name: Hikari Connection Pool  # Pool Name Alias
+      maximum-pool-size: 20
+  thymeleaf:
+    cache: false
 
-file.download.directory=${DATA_DIR:/data}
+
+file:
+  download:
+    directory: ${DATA_DIR:/data}
 
 
-logging.level.web=${LOG_LEVEL:DEBUG}
-
-
-# database
-spring.datasource.url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:9999}/${DB_NAME:mydb}?characterEncoding=utf8
-spring.datasource.username: ${DB_USERNAME:test}
-spring.datasource.password: ${DB_PASSWORD:1234}
-spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
-
+logging:
+  level:
+    web: ${LOG_LEVEL:DEBUG}
+    com.zaxxer.hikari.pool.HikariPool: debug
+    
 # mybatis
 #mybatis.config=mybatis-config.xml
-mybatis.type-aliases-package: com.yehan.web
-mybatis.mapper-locations: classpath:mybatis/mapper/**/*.xml
-mybatis.configuration.map-underscore-to-camel-case: true
+mybatis:
+  type-aliases-package: com.yehan.web
+  mapper-locations: classpath:mybatis/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
