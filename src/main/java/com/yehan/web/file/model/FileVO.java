@@ -1,4 +1,4 @@
-package com.yehan.web.vo;
+package com.yehan.web.file.model;
 
 import java.util.Arrays;
 
